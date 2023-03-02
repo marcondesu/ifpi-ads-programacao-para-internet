@@ -24,7 +24,7 @@ def busca(termo, url, profundidade):
     while posicao != -1:
         inicio = max(0, posicao - 20)
         fim = min(len(texto), posicao + len(termo) + 20)
-        # print(f'## {texto[inicio:fim]}')
+        print(f'## {texto[inicio:fim]}')
 
         rank[url] += 1 # incrementa a quantidade de ocorrências
         posicao = texto.find(termo, posicao + 1)
@@ -52,7 +52,7 @@ def busca(termo, url, profundidade):
             while posicao != -1:
                 inicio = max(0, posicao - 20)
                 fim = min(len(texto), posicao + len(termo) + 20)
-                # print(f'## {texto[inicio:fim]}'.replace('\n', '')) # remove quebras de linha e printa a ocorrência
+                print(f'## {texto[inicio:fim]}'.replace('\n', '')) # remove quebras de linha e printa a ocorrência
 
                 rank[link] += 1 # incrementa a quantidade de ocorrências
                 posicao = texto.find(termo, posicao + 1)
