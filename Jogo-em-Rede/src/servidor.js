@@ -1,19 +1,45 @@
 "use strict";
-exports.__esModule = true;
-var net = require("net");
-// cria uma instância do servidor TCP
-// recebe uma função que é executada sempre que um novo cliente se conecta ao servidor
-var server = net.createServer();
-server.on('connection', function (socket) {
-    console.log("Cliente conectado: ".concat(socket.remoteAddress, ":").concat(socket.remotePort));
-    socket.write('Olá, cliente!\n');
-    server.on('data', function (data) {
-        console.log("Mensagem do cliente: ".concat(data.toString()));
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const net = __importStar(require("net"));
+// array que armazena as conexões
+let sockets = [];
+const server = net.createServer((socket) => {
+    console.log(`$ Cliente conectado: ${socket.remoteAddress}:${socket.remotePort}`);
+    sockets.push(socket);
+    socket.on('data', (data) => {
+        console.log(`(${socket.remotePort}): ${data.toString()}`);
     });
-    server.on('end', function () {
-        console.log('Cliente desconectado\n');
+    socket.on('end', () => {
+        console.log(`$ Cliente ${socket.remoteAddress}:${socket.remotePort} desconectado\n---------------------------`);
+        const index = sockets.indexOf(socket);
+        if (index !== -1) {
+            sockets.splice(index, 1); // remove a conexão desconectada do array de sockets
+        }
     });
 });
-server.listen(3000, function () {
-    console.log('Servidor inicializado na porta 3000');
+server.listen(3000, () => {
+    console.log('$ Servidor inicializado na porta 3000\n');
 });

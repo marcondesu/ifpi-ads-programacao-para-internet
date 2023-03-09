@@ -1,22 +1,27 @@
 import * as net from 'net'
 
-// cria uma instância do servidor TCP
-// recebe uma função que é executada sempre que um novo cliente se conecta ao servidor
-const server: net.Server = net.createServer()
+// array que armazena as conexões
+let sockets: net.Socket[] = []
 
-server.on('connection', (socket: net.Socket) => {
-   console.log(`Cliente conectado: ${socket.remoteAddress}:${socket.remotePort}`)
-   socket.write('Olá, cliente!\n')
+const server: net.Server = net.createServer((socket: net.Socket) => {
+   console.log(`$ Cliente conectado: ${socket.remoteAddress}:${socket.remotePort}`)
+   sockets.push(socket)
    
-   server.on('data', (data: Buffer) => {
-      console.log(`Mensagem do cliente: ${data.toString()}`)
+   socket.on('data', (data: Buffer) => { // função que trata os dados enviados pelo cliente ao servidor
+      console.log(`(${socket.remotePort}): ${data.toString()}`) // mensagem do cliente é mostrada no terminal
    })
-   
-   server.on('end', () => {
-      console.log('Cliente desconectado\n')
+
+   socket.on('end', () => { // função chamada ao cliente ser desconectado
+      console.log(`$ Cliente ${socket.remoteAddress}:${socket.remotePort} desconectado\n---------------------------`)
+
+      // remover cliente do array ao ser desconectado
+      const index = sockets.indexOf(socket)
+      if (index !== -1) {
+         sockets.splice(index, 1) // remove a conexão desconectada do array de sockets
+      }
    })
 })
 
-server.listen(3000, () => {
-   console.log('Servidor inicializado na porta 3000')
+server.listen(3000, () => { // servidor está 'ouvindo' na porta 3000 (clientes se conectarão nela)
+   console.log('$ Servidor inicializado na porta 3000\n')
 })
