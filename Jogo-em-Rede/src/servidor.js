@@ -46,16 +46,20 @@ const server = net.createServer((socket) => {
         message_all('Jogo iniciado.');
         nova_jogada();
         message_all(` ${value_1} + ${value_2} = ?`);
-        for (let value of scoreboard) {
-            if (value === 2) {
-                message_all(`$ Jogador ${sockets[scoreboard.indexOf(2)]} venceu!`);
-            }
-        }
     }
     socket.on('data', (data) => {
         if (data.toString() === `${result}`) {
             scoreboard[sockets.indexOf(socket)]++;
             console.log(`$ (${socket.remotePort}) Pontuou`);
+            for (let value of scoreboard) {
+                if (value === 2) {
+                    message_all(`\n$ Jogador ${sockets[scoreboard.indexOf(2)].remotePort} venceu!`);
+                    sockets.forEach((player) => {
+                        player.end();
+                    });
+                    return;
+                }
+            }
             nova_jogada();
             message_all(`\nNova rodada\n ${value_1} + ${value_2} = ?`);
         }

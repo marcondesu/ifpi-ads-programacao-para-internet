@@ -42,6 +42,7 @@ client.on('data', (data) => {
 });
 client.on('end', () => {
     console.log('$ Desconectado do servidor');
+    rline.close();
 });
 // método chamado toda vez que uma nova linha for lida pelo terminal
 rline.on('line', (input) => {
