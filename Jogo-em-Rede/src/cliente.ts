@@ -10,7 +10,7 @@ const rline = readline.createInterface({
 const client: net.Socket = new net.Socket()
 
 client.connect(3000, 'localhost', () => {
-   client.write('Olá, eu sou o cliente 1')
+   // client.write('Olá, eu sou o cliente 1')
 })
 
 client.on('connect', () => {
@@ -18,7 +18,7 @@ client.on('connect', () => {
 })
 
 client.on('data', (data: Buffer) => {
-   console.log(`(Server) ${data.toString()}`) // mensagem recebida do servidor
+   console.log(`${data.toString()}`) // mensagem recebida do servidor
 })
 
 client.on('end', () => {
