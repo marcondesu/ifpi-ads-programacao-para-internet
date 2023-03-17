@@ -2,6 +2,7 @@ import * as net from 'net'
 import * as fs from 'fs'
 
 // array que armazena as conexões
+const connectedUsers = new Map<net.Socket, string>();
 let sockets: net.Socket[] = []
 let matches: number[] = []
 let counter = 1 // quantidade de partidas/rodadas
@@ -15,8 +16,9 @@ const nova_jogada = (): void => {
 }
 
 // envia uma mensagem para todos os clientes conectados ao servidor
-const message_all = (message: string): void => {
+const message_all = (message: string, origin?: net.Socket): void => {
    sockets.forEach((player) => {
+      if (player === origin) return
       player.write(message)
    })
 }
@@ -26,9 +28,9 @@ const get_matchesStr = (): string => {
 
    sockets.forEach((player) => {
       if (player == sockets[sockets.length - 1]) {
-         matchesStr += `${player.remotePort}-${matches[sockets.indexOf(player)]}`
+         matchesStr += `${connectedUsers.get(player)}-${matches[sockets.indexOf(player)]}`
       } else {
-         matchesStr += `${player.remotePort}-${matches[sockets.indexOf(player)]}-`
+         matchesStr += `${connectedUsers.get(player)}-${matches[sockets.indexOf(player)]}-`
       }
    })
 
@@ -39,12 +41,19 @@ const get_matchesInfo = (): string => {
    let info = ''
    let lines = fs.readFileSync('./matches.txt').toString().split('\n')
    let i = 0
+   let b = 1
    
    while (lines[i] != null) {
       const line = lines[i].split('-')
-      info += `\nPartida ${i + 1}\n (${line[0]}): ${line[1]}\n (${line[2]}): ${line[3]}\n`
+      info += `\nPartida ${i + 1}\n`
+
+      for (let a = 0; a < line.length; a += 2){
+         info += `(${line[a]}): ${line[b]}\n`
+         b += 2
+      }
 
       i++
+      b = 1
    }
 
    return info
@@ -52,6 +61,7 @@ const get_matchesInfo = (): string => {
 
 const server: net.Server = net.createServer((socket: net.Socket) => {
    console.log(`$ Cliente conectado: ${socket.remoteAddress}:${socket.remotePort}`)
+   connectedUsers.set(socket, `${socket.remotePort}`)
    sockets.push(socket)
    matches.push(0)
 
@@ -63,8 +73,15 @@ const server: net.Server = net.createServer((socket: net.Socket) => {
    }
    
    socket.on('data', (data: Buffer) => { // função que trata os dados enviados pelo cliente ao servidor
-      if (data.toString() === '/partidas') { // se o jogador digitar '/partidas'
+      if (data.toString().indexOf('/nickname') === 0) {
+         let nickname = data.toString().replace('/nickname ', '')
+         
+         message_all(`Jogador "${connectedUsers.get(socket)}" agora é "${nickname}"`, socket)
+         connectedUsers.set(socket, nickname)
+      } else if (data.toString() === '/partidas') { // se o jogador digitar '/partidas'
          socket.write(get_matchesInfo()) // envia uma string contendo as informações das partidas
+      } else {
+         message_all(`${connectedUsers.get(socket)}: ${data.toString()}`, socket)
       }
 
       if (data.toString() === `${result}`) { // se o jogador digitou o valor do resultado, venceu a rodada
@@ -74,7 +91,7 @@ const server: net.Server = net.createServer((socket: net.Socket) => {
 
          for (let value of matches) { // percorre o array de pontuações
             if (value === 2) { // se o valor da posição corrente for igual a 2, o cliente na mesma posição no array de sockets é o vencedor
-               message_all(`\n$ Jogador ${sockets[matches.indexOf(2)].remotePort} venceu!`)
+               message_all(`\n$ Jogador ${sockets[matches.indexOf(2)].remotePort} venceu!`, socket)
                let matches_string = get_matchesStr()
 
                try{
