@@ -91,7 +91,8 @@ const server: net.Server = net.createServer((socket: net.Socket) => {
 
          for (let value of matches) { // percorre o array de pontuações
             if (value === 2) { // se o valor da posição corrente for igual a 2, o cliente na mesma posição no array de sockets é o vencedor
-               message_all(`\n$ Jogador ${sockets[matches.indexOf(2)].remotePort} venceu!`, socket)
+               message_all(`\n$ ${connectedUsers.get(sockets[matches.indexOf(2)])} venceu!`, socket)
+               socket.write('Você venceu!')
                let matches_string = get_matchesStr()
 
                try{
