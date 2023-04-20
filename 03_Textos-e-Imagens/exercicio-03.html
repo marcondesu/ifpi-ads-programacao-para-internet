@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios sobre HTML e CSS 03</title>
+    <style>
+        :root {
+            font-size: 16px;
+        }
+
+        body {
+            background: linear-gradient(#b3cce2, #d9ccc1);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        h1 {
+            background-color: #005eb0;
+            color: #d9ccc1;
+            font-size: 3rem;
+            text-align: center;
+            letter-spacing: .5rem; /* ????? */
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            background-color: #005eb0;
+            color: #d9ccc1;
+        }
+
+        p {
+            font-size: 1.0rem;
+            color: #024059;
+        }
+
+        .citacao-motivacional {
+            font-family: 'Tilt Neon', cursive;
+        }
+
+        .autor {
+            color: darkslategray;
+            font-style: italic;
+            text-align: right;
+        }
+
+        .data {
+            color: darkslategray;
+            font-style: italic;
+            font-size: .8rem;
+            text-align: left;
+        }
+
+        .strikethrough {
+            position: relative;
+        }
+
+        .strikethrough:before {
+            position: absolute;
+            content: "";
+            left: 0;
+            top: 50%;
+            right: 0;
+            border-top: 1px solid;
+            border-color: inherit;
+            
+            -webkit-transform:rotate(-5deg);
+            -moz-transform:rotate(-5deg);
+            -ms-transform:rotate(-5deg);
+            -o-transform:rotate(-5deg);
+            transform:rotate(-5deg);
+        }
+    </style>
+</head>
+<body>
+    <h1>WEB Front-End</h1>
+    <h2>Texto pré-formatado</h2>
+    <p class="data">10/03/2023</p>
+    <p>Segue um exemplo de texto pré-formatado usando a linguagem de programação python:</p>
+    
+    <pre>
+        def imprimir_padrao(num_linhas):
+            for i in range(num_linhas):
+            for num_colunas in range(num_linhas-i):
+                print("*", end="")
+        print()
+    </pre>
+    
+    <p class="autor">Por ely.miranda</p>
+
+    <h2>Parábola motivacional</h2>
+    <p class="data">09/03/2023</p>
+    <p class="citacao-motivacional">
+        "Oportunidades"
+        Você já parou para pensar que pode estar deixando oportunidades incríveis passarem
+        por você sem perceber? Muitas vezes, temos medo de sair da nossa zona de conforto
+        e arriscar. Mas a verdade é que a única maneira de alcançar nossos sonhos é através
+        da ação.
+        Não espere que as oportunidades caiam em seu colo - vá atrás delas com tudo o que
+        tem. Não deixe que o medo o paralise. Em vez disso, transforme-o em combustível
+        para impulsionar você em direção aos seus objetivos.
+        Lembre-se sempre: você é capaz de grandes coisas. Não se subestime. Acredite em
+        si mesmo e em suas habilidades. E, acima de tudo, nunca desista. As oportunidades
+        estão lá fora, apenas esperando por você. É hora de pegá-las!
+    </p>
+    <p style="color: black; font-style: italic;">Les Brown</p>
+
+    <p class="autor">Por ely.miranda</p>
+
+    <h2>Hello world!</h2>
+    <p class="data">09/03/2023</p>
+    Um Hello World inusitado
+
+    <p class="autor">Por ely.miranda</p>
+    
+    <h2>Texto riscado</h2>
+    <p class="data">08/03/2023</p>
+    <span class="strikethrough">
+        <p class="citacao-motivacional">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa perferendis aliquid
+            voluptatem, quidem quia nulla quos enim. Beatae odit mollitia delectus asperiores
+            deleniti eum quasi assumenda adipisci, illum nisi laboriosam!
+        </p>    
+    </span>
+
+    <p class="autor">Por ely.miranda</p>
+</body>
+</html>
