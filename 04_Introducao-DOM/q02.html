@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introdução ao DOM</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            const elemento_id = document.getElementById("p1")
+            const elemento_tagname = document.getElementsByTagName("h1")
+
+            alert(elemento_tagname[0].textContent)
+            alert(elemento_id.innerHTML)
+        }
+    </script>
+
+    <h1>Introdução ao DOM</h1>
+    <p id="p1">Parágrafo com o ID procurado</p>
+    <p id="p2">Rexona não te abandona</p>
+</body>
+</html>
